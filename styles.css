@@ -1,0 +1,548 @@
+/* ============================================================
+ * Paper Manager - 完整样式表
+ * ============================================================ */
+
+/* ============================================================
+ * 一、树形视图
+ * ============================================================ */
+
+.pm-tree-container {
+	padding: 4px 0;
+	font-size: 13px;
+	overflow: auto;
+	height: 100%;
+	user-select: none;
+}
+
+.pm-tree-empty {
+	color: var(--text-muted);
+	padding: 20px;
+	text-align: center;
+}
+
+.pm-tree-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 4px 12px 4px 0;
+	cursor: pointer;
+	line-height: 1.4;
+	border-radius: 4px;
+	transition: background 0.08s ease;
+}
+
+.pm-tree-row:hover {
+	background: var(--background-modifier-hover);
+}
+
+.pm-tree-arrow {
+	width: 14px;
+	flex-shrink: 0;
+	text-align: center;
+	font-size: 8px;
+	color: var(--text-faint);
+	transition: transform 0.1s;
+}
+
+.pm-tree-arrow-placeholder {
+	visibility: hidden;
+}
+
+.pm-tree-folder-icon,
+.pm-tree-paper-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	color: var(--text-muted);
+}
+
+.pm-tree-folder-icon svg,
+.pm-tree-paper-icon svg {
+	width: 100%;
+	height: 100%;
+}
+
+.pm-tree-folder-row .pm-tree-folder-icon {
+	color: var(--text-accent, #7c6ee0);
+}
+
+.pm-tree-paper-row .pm-tree-paper-icon {
+	color: var(--text-muted);
+}
+
+.pm-tree-folder-name {
+	font-weight: 600;
+	color: var(--text-normal);
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
+}
+
+.pm-tree-folder-count {
+	font-size: 11px;
+	color: var(--text-faint);
+	font-weight: 400;
+	padding: 0 6px;
+	flex-shrink: 0;
+}
+
+.pm-tree-paper-title {
+	color: var(--text-normal);
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
+}
+
+.pm-tree-paper-row:hover .pm-tree-paper-title {
+	color: var(--text-accent);
+}
+
+.pm-tree-paper-meta {
+	font-size: 11px;
+	color: var(--text-faint);
+	flex-shrink: 0;
+	white-space: nowrap;
+	padding-left: 8px;
+}
+
+.pm-tree-paper-pdf {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+	color: var(--text-faint);
+	flex-shrink: 0;
+	opacity: 0;
+	transition: opacity 0.1s, color 0.1s, background 0.1s;
+}
+
+.pm-tree-paper-row:hover .pm-tree-paper-pdf {
+	opacity: 1;
+}
+
+.pm-tree-paper-pdf:hover {
+	color: var(--text-accent);
+	background: var(--background-modifier-hover);
+}
+
+.pm-tree-children {
+	margin-left: 17px;
+	border-left: 1px solid var(--background-modifier-border);
+}
+
+.pm-tree-container > .pm-tree-children {
+	margin-left: 0;
+	border-left: none;
+}
+
+/* ============================================================
+ * 二、表格视图（资源管理器式）
+ * ============================================================ */
+
+.pm-bases-container {
+	padding: 8px;
+	overflow: auto;
+	height: 100%;
+}
+
+.pm-explorer-container {
+	padding: 8px;
+	overflow: auto;
+	height: 100%;
+}
+
+.pm-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.pm-table th,
+.pm-table td {
+	padding: 6px 10px;
+	text-align: left;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.pm-table th {
+	font-weight: 600;
+	color: var(--text-muted);
+	background: var(--background-secondary);
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.pm-table tr:hover {
+	background: var(--background-modifier-hover);
+}
+
+.pm-table a {
+	color: var(--link-color);
+	text-decoration: none;
+}
+
+.pm-table a:hover {
+	text-decoration: underline;
+}
+
+.pm-folder-tag {
+	font-size: 11px;
+	padding: 1px 6px;
+	background: var(--background-secondary);
+	border-radius: 10px;
+	color: var(--text-muted);
+}
+
+.pm-explorer-name-cell {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-width: 0;
+}
+
+.pm-explorer-folder-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	color: var(--text-accent, #7c6ee0);
+	flex-shrink: 0;
+}
+
+.pm-explorer-folder-icon svg {
+	width: 100%;
+	height: 100%;
+}
+
+.pm-explorer-paper-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	color: var(--text-muted);
+	flex-shrink: 0;
+}
+
+.pm-explorer-paper-icon svg {
+	width: 100%;
+	height: 100%;
+}
+
+.pm-explorer-folder-name {
+	font-weight: 600;
+	color: var(--text-normal);
+	text-decoration: none;
+	cursor: pointer;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
+}
+
+.pm-explorer-folder-row:hover .pm-explorer-folder-name {
+	color: var(--text-accent);
+}
+
+.pm-explorer-folder-row {
+	cursor: pointer;
+}
+
+.pm-explorer-count-cell {
+	color: var(--text-muted);
+	font-size: 12px;
+}
+
+.pm-explorer-folder-count {
+	font-style: italic;
+}
+
+.pm-explorer-note-title {
+	color: var(--text-normal);
+	text-decoration: none;
+	cursor: pointer;
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	min-width: 0;
+}
+
+.pm-explorer-note-title:hover {
+	color: var(--text-accent);
+	text-decoration: underline;
+}
+
+/* ============================================================
+ * 三、可调整列宽的表格
+ * ============================================================ */
+
+.pm-resizable-table {
+	table-layout: fixed;
+}
+
+.pm-resizable-table th,
+.pm-resizable-table td {
+	/* 允许拖动条溢出到相邻列 */
+	overflow: visible;
+}
+
+.pm-resizable-table td {
+	/* 单元格内容超长省略 */
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pm-resizable-table th {
+	position: relative;
+	white-space: nowrap;
+	overflow: visible;
+}
+
+.pm-resizable-table td .pm-explorer-name-cell {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* ------------ 列之间的拖动手柄 ------------ */
+
+.pm-col-resizer {
+	position: absolute;
+	top: 0;
+	right: -4px;
+	width: 8px;
+	height: 100%;
+	cursor: col-resize;
+	z-index: 20;
+	background: transparent;
+	pointer-events: auto;
+}
+
+/* 默认就显示一条淡色分隔线 */
+.pm-col-resizer::after {
+	content: '';
+	position: absolute;
+	top: 20%;
+	bottom: 20%;
+	left: 50%;
+	width: 1px;
+	transform: translateX(-50%);
+	background: var(--background-modifier-border);
+	transition: background 0.15s, width 0.15s, top 0.15s, bottom 0.15s;
+}
+
+/* hover：线条变粗、变强调色、加长 */
+.pm-col-resizer:hover::after {
+	background: var(--interactive-accent);
+	width: 2px;
+	top: 0;
+	bottom: 0;
+}
+
+/* 拖动中：更粗更明显 */
+body.pm-resizing .pm-col-resizer::after {
+	background: var(--interactive-accent);
+	width: 2px;
+	top: 0;
+	bottom: 0;
+}
+
+/* 拖动中全局光标 */
+body.pm-resizing {
+	cursor: col-resize;
+	user-select: none;
+}
+
+body.pm-resizing * {
+	cursor: col-resize !important;
+	user-select: none !important;
+}
+
+/* ============================================================
+ * 四、中科院分区单元格（两行居中）
+ * ============================================================ */
+
+.pm-cas-cell {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	line-height: 1.25;
+}
+
+.pm-cas-subject {
+	font-size: 11px;
+	color: var(--text-muted);
+	white-space: nowrap;
+}
+
+.pm-cas-zone {
+	font-size: 13px;
+	color: var(--text-normal);
+	white-space: nowrap;
+}
+
+/* ============================================================
+ * 五、颜色标记
+ * ============================================================ */
+
+.pm-color-green { color: #22c55e; font-weight: 600; }
+.pm-color-blue { color: #3b82f6; font-weight: 600; }
+.pm-color-yellow { color: #eab308; font-weight: 600; }
+.pm-color-red { color: #ef4444; font-weight: 600; }
+.pm-color-gray { color: var(--text-muted); }
+
+.theme-dark .pm-color-green { color: #4ade80; }
+.theme-dark .pm-color-blue { color: #60a5fa; }
+.theme-dark .pm-color-yellow { color: #facc15; }
+.theme-dark .pm-color-red { color: #f87171; }
+
+.theme-light .pm-color-green { color: #16a34a; }
+.theme-light .pm-color-blue { color: #2563eb; }
+.theme-light .pm-color-yellow { color: #ca8a04; }
+.theme-light .pm-color-red { color: #dc2626; }
+
+/* ============================================================
+ * 六、设置面板：颜色规则编辑
+ * ============================================================ */
+
+.pm-color-section {
+	margin: 8px 0 16px 0;
+	padding: 8px 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	background: var(--background-secondary);
+}
+
+.pm-color-section-title {
+	margin: 0 0 8px 0;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--text-normal);
+}
+
+.pm-rule-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.pm-rule-label {
+	font-size: 12px;
+	color: var(--text-muted);
+	flex-shrink: 0;
+}
+
+.pm-rule-input {
+	flex: 0 0 auto;
+	padding: 3px 6px;
+	font-size: 12px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-primary);
+	color: var(--text-normal);
+	min-width: 0;
+}
+
+.pm-rule-input[type="number"] {
+	width: 80px;
+}
+
+.pm-rule-color-input {
+	width: 130px;
+	font-family: var(--font-monospace);
+}
+
+.pm-rule-preview {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	border-radius: 4px;
+	flex-shrink: 0;
+}
+
+.pm-rule-del {
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	font-size: 14px;
+	line-height: 1;
+	border-radius: 4px;
+	cursor: pointer;
+	background: transparent;
+	border: 1px solid var(--background-modifier-border);
+	color: var(--text-muted);
+	flex-shrink: 0;
+}
+
+.pm-rule-del:hover {
+	background: var(--background-modifier-error-hover, rgba(220, 38, 38, 0.1));
+	color: var(--text-error, #dc2626);
+	border-color: var(--text-error, #dc2626);
+}
+
+.pm-rule-add {
+	margin-top: 6px;
+	padding: 4px 10px;
+	font-size: 12px;
+	border-radius: 4px;
+	cursor: pointer;
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border: none;
+}
+
+.pm-rule-add:hover {
+	background: var(--interactive-accent-hover);
+}
+
+/* ============================================================
+ * 名称列表头：返回上级按钮
+ * ============================================================ */
+
+.pm-name-header {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.pm-back-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	border: none;
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+	color: var(--text-muted);
+	flex-shrink: 0;
+	transition: background 0.1s, color 0.1s;
+}
+
+.pm-back-btn:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-accent);
+}
+
+.pm-back-btn svg {
+	width: 16px;
+	height: 16px;
+	display: block;
+}

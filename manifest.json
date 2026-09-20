@@ -1,0 +1,10 @@
+{
+  "id": "paper-manager",
+  "name": "Paper Manager",
+  "version": "0.0.1",
+  "minAppVersion": "0.15.0",
+  "description": "Manage paper notes and PDFs, fetch metadata via DOI.",
+  "author": "Jinchao Huang",
+  "authorUrl": "https://github.com/grozta",
+  "isDesktopOnly": false
+}
