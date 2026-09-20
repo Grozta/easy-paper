@@ -962,17 +962,17 @@ export class PaperTreeBasesView extends BasesView {
 		row.createEl('span', { cls: 'pm-tree-folder-count', text: `${count}` });
 
 		const childrenEl = wrapper.createDiv({ cls: 'pm-tree-children' });
-		if (isCollapsed) childrenEl.style.display = 'none';
+		if (isCollapsed) childrenEl.addClass('pm-hidden');
 		this.renderTreeNode(folder, childrenEl, depth + 1);
 
 		row.onclick = () => {
 			if (this.collapsedFolders.has(folder.path)) {
 				this.collapsedFolders.delete(folder.path);
-				childrenEl.style.display = '';
+				childrenEl.removeClass('pm-hidden');
 				row.querySelector('.pm-tree-arrow')!.textContent = '▼';
 			} else {
 				this.collapsedFolders.add(folder.path);
-				childrenEl.style.display = 'none';
+				childrenEl.addClass('pm-hidden');
 				row.querySelector('.pm-tree-arrow')!.textContent = '▶';
 			}
 		};
@@ -1083,23 +1083,20 @@ export class PaperTableBasesView extends BasesView {
 		const visibleCols = this.getVisibleColumns();
 		const table = this.containerEl.createEl('table', { cls: 'pm-table pm-explorer-table pm-resizable-table' });
 
-		// colgroup：明确列宽
 		const colgroup = table.createEl('colgroup');
 		for (const col of visibleCols) {
 			const colEl = colgroup.createEl('col');
 			if (col.key === 'name') continue;
 			const width = this.plugin.settings.columnWidths[col.key] ?? DEFAULT_COLUMN_WIDTHS[col.key];
-			if (width) colEl.style.width = `${width}px`;
+			if (width) colEl.setCssStyles({ width: `${width}px` });
 		}
 
-		// 表头 + 拖动手柄
 		const thead = table.createEl('thead');
 		const headRow = thead.createEl('tr');
 		visibleCols.forEach((col, idx) => {
 			const th = headRow.createEl('th');
 
 			if (col.key === 'name') {
-				// 名称列：返回上级按钮 + 标签
 				th.addClass('pm-name-header');
 
 				if (currentPath !== '') {
@@ -1121,7 +1118,6 @@ export class PaperTableBasesView extends BasesView {
 				th.setText(col.label);
 			}
 
-			// 最后一列不加手柄
 			if (idx < visibleCols.length - 1) {
 				const handle = th.createEl('div', { cls: 'pm-col-resizer' });
 				handle.setAttr('aria-label', `拖动调整「${col.label}」列宽`);
@@ -1161,7 +1157,7 @@ export class PaperTableBasesView extends BasesView {
 			const delta = e.clientX - startX;
 			const newWidth = Math.max(40, startWidth + delta);
 			const colEl = colgroup.children[idx] as HTMLElement;
-			if (colEl) colEl.style.width = `${newWidth}px`;
+			if (colEl) colEl.setCssStyles({ width: `${newWidth}px` });
 		};
 
 		const onUp = async () => {
@@ -1193,7 +1189,7 @@ export class PaperTableBasesView extends BasesView {
 			startWidth = th.getBoundingClientRect().width;
 
 			const colEl = colgroup.children[idx] as HTMLElement;
-			if (colEl) colEl.style.width = `${startWidth}px`;
+			if (colEl) colEl.setCssStyles({ width: `${startWidth}px` });
 
 			document.addEventListener('mousemove', onMove);
 			document.addEventListener('mouseup', onUp);
@@ -1357,8 +1353,7 @@ export class PaperTableBasesView extends BasesView {
 		for (const rule of sorted) {
 			if (num >= rule.threshold && rule.color) {
 				const span = cell.createEl('span', { text: `${num}` });
-				span.style.color = rule.color;
-				span.style.fontWeight = '600';
+				span.setCssStyles({ color: rule.color, fontWeight: '600' });
 				return;
 			}
 		}
@@ -1375,8 +1370,7 @@ export class PaperTableBasesView extends BasesView {
 		const found = rules.find(r => r.value === v);
 		if (found && found.color) {
 			const span = cell.createEl('span', { text: v });
-			span.style.color = found.color;
-			span.style.fontWeight = '600';
+			span.setCssStyles({ color: found.color, fontWeight: '600' });
 		} else {
 			cell.textContent = v;
 		}
@@ -1404,8 +1398,7 @@ export class PaperTableBasesView extends BasesView {
 		if (subject) wrap.createDiv({ cls: 'pm-cas-subject', text: subject });
 		const zoneEl = wrap.createDiv({ cls: 'pm-cas-zone', text: zone });
 		if (color) {
-			zoneEl.style.color = color;
-			zoneEl.style.fontWeight = '600';
+			zoneEl.setCssStyles({ color: color, fontWeight: '600' });
 		}
 	}
 }
@@ -1452,23 +1445,39 @@ class DOIInputModal extends Modal {
 		contentEl.createEl('h2', { text: '从 DOI 创建论文笔记' });
 
 		const doiLabel = contentEl.createEl('label', { text: 'DOI' });
-		doiLabel.style.cssText = 'display:block;margin-bottom:4px;font-weight:600;';
+		doiLabel.setCssStyles({
+			display: 'block',
+			marginBottom: '4px',
+			fontWeight: '600',
+		});
 		const doiInput = contentEl.createEl('input', { type: 'text', placeholder: '例如: 10.1038/nature12373 或 10.48550/arXiv.1706.03762' });
-		doiInput.style.cssText = 'width:100%;margin-bottom:1em;';
+		doiInput.setCssStyles({ width: '100%', marginBottom: '1em' });
 
 		const pathLabel = contentEl.createEl('label', { text: '存放位置' });
-		pathLabel.style.cssText = 'display:block;margin-bottom:4px;font-weight:600;';
+		pathLabel.setCssStyles({
+			display: 'block',
+			marginBottom: '4px',
+			fontWeight: '600',
+		});
 		const defaultPath = this.defaultFolderOverride || this.plugin.getDefaultFolder();
 		const pathInput = contentEl.createEl('input', { type: 'text', value: defaultPath });
-		pathInput.style.cssText = 'width:100%;margin-bottom:4px;';
+		pathInput.setCssStyles({ width: '100%', marginBottom: '4px' });
 		new FolderSuggest(this.app, pathInput);
 
 		const hint = contentEl.createEl('div');
-		hint.style.cssText = 'font-size:11px;color:var(--text-muted);margin-bottom:1em;';
+		hint.setCssStyles({
+			fontSize: '11px',
+			color: 'var(--text-muted)',
+			marginBottom: '1em',
+		});
 		hint.setText(`论文根目录：${this.plugin.settings.notesFolder}`);
 
 		const btnRow = contentEl.createDiv();
-		btnRow.style.cssText = 'display:flex;justify-content:flex-end;gap:8px;';
+		btnRow.setCssStyles({
+			display: 'flex',
+			justifyContent: 'flex-end',
+			gap: '8px',
+		});
 
 		const cancelBtn = btnRow.createEl('button', { text: '取消' });
 		cancelBtn.onclick = () => this.close();
@@ -1529,11 +1538,20 @@ class ProgressModal extends Modal {
 		const { contentEl } = this;
 		contentEl.createEl('h2', { text: '批量刷新论文元数据' });
 		this.statusEl = contentEl.createEl('p');
-		this.statusEl.style.cssText = 'white-space:pre-wrap;font-family:var(--font-monospace);font-size:13px;';
+		this.statusEl.setCssStyles({
+			whiteSpace: 'pre-wrap',
+			fontFamily: 'var(--font-monospace)',
+			fontSize: '13px',
+		});
 		this.statusEl.setText(`准备中...（共 ${this.total} 篇）`);
 
 		const btnRow = contentEl.createDiv();
-		btnRow.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;margin-top:1em;';
+		btnRow.setCssStyles({
+			display: 'flex',
+			gap: '8px',
+			justifyContent: 'flex-end',
+			marginTop: '1em',
+		});
 		this.closeBtn = btnRow.createEl('button', { text: '关闭' });
 		this.closeBtn.disabled = true;
 		this.closeBtn.onclick = () => this.close();
@@ -1568,10 +1586,15 @@ class ConfirmModal extends Modal {
 		contentEl.createEl('h2', { text: '确认操作' });
 		const p = contentEl.createEl('p');
 		p.setText(this.message);
-		p.style.whiteSpace = 'pre-wrap';
+		p.setCssStyles({ whiteSpace: 'pre-wrap' });
 
 		const btnRow = contentEl.createDiv();
-		btnRow.style.cssText = 'display:flex;gap:8px;justify-content:flex-end;margin-top:1em;';
+		btnRow.setCssStyles({
+			display: 'flex',
+			gap: '8px',
+			justifyContent: 'flex-end',
+			marginTop: '1em',
+		});
 
 		const cancelBtn = btnRow.createEl('button', { text: '取消' });
 		cancelBtn.onclick = () => { this.callback(false); this.close(); };
@@ -1598,9 +1621,9 @@ class PaperManagerSettingTab extends PluginSettingTab {
 	display(): void {
 		const { containerEl } = this;
 		containerEl.empty();
-		containerEl.createEl('h2', { text: 'Paper Manager 设置' });
 
-		containerEl.createEl('h3', { text: '目录设置' });
+		new Setting(containerEl).setName('Paper Manager 设置').setHeading();
+		new Setting(containerEl).setName('目录设置').setHeading();
 
 		new Setting(containerEl)
 			.setName('论文根目录')
@@ -1627,7 +1650,7 @@ class PaperManagerSettingTab extends PluginSettingTab {
 				new FolderSuggest(this.app, text.inputEl);
 			});
 
-		containerEl.createEl('h3', { text: '论文标识' });
+		new Setting(containerEl).setName('论文标识').setHeading();
 
 		new Setting(containerEl)
 			.setName('论文标识符（标签）')
@@ -1647,11 +1670,10 @@ class PaperManagerSettingTab extends PluginSettingTab {
 				await this.plugin.addPaperTagToAll();
 			}));
 
-		containerEl.createEl('h3', { text: '表格视图 - 列显示' });
-		containerEl.createEl('p', {
-			text: '选择表格视图中要显示的列。"名称"列必须保留。',
-			cls: 'setting-item-description'
-		});
+		new Setting(containerEl).setName('表格视图 - 列显示').setHeading();
+		new Setting(containerEl)
+			.setName('说明')
+			.setDesc('选择表格视图中要显示的列。"名称"列必须保留。');
 
 		for (const col of COLUMN_DEFS) {
 			new Setting(containerEl)
@@ -1666,7 +1688,7 @@ class PaperManagerSettingTab extends PluginSettingTab {
 					}));
 		}
 
-		containerEl.createEl('h3', { text: '表格视图 - 排序' });
+		new Setting(containerEl).setName('表格视图 - 排序').setHeading();
 
 		new Setting(containerEl)
 			.setName('排序字段')
@@ -1694,18 +1716,17 @@ class PaperManagerSettingTab extends PluginSettingTab {
 					});
 			});
 
-		containerEl.createEl('h3', { text: '表格视图 - 颜色自定义' });
-		containerEl.createEl('p', {
-			text: '颜色仅作用于表格视图。颜色支持任何 CSS 颜色值（如 #ef4444 / red / #22c55e）。留空则使用默认字体颜色。规则按阈值从高到低匹配，第一个满足的生效。中科院分区只对 "X区" 部分着色。',
-			cls: 'setting-item-description'
-		});
+		new Setting(containerEl).setName('表格视图 - 颜色自定义').setHeading();
+		new Setting(containerEl)
+			.setName('说明')
+			.setDesc('颜色仅作用于表格视图。颜色支持任何 CSS 颜色值（如 #ef4444 / red / #22c55e）。留空则使用默认字体颜色。规则按阈值从高到低匹配，第一个满足的生效。中科院分区只对 "X区" 部分着色。');
 
 		this.renderNumericColorSection(containerEl, 'cited_by', '引用数颜色');
 		this.renderNumericColorSection(containerEl, 'impact_factor', '影响因子颜色');
 		this.renderEnumColorSection(containerEl, 'sci_quartile', 'JCR 分区颜色');
 		this.renderEnumColorSection(containerEl, 'cas_quartile', '中科院分区颜色');
 
-		containerEl.createEl('h3', { text: '外部 API' });
+		new Setting(containerEl).setName('外部 API').setHeading();
 
 		new Setting(containerEl)
 			.setName('Unpaywall 邮箱')
@@ -1729,7 +1750,7 @@ class PaperManagerSettingTab extends PluginSettingTab {
 					await this.plugin.saveSettings();
 				}));
 
-		containerEl.createEl('h3', { text: '批量操作' });
+		new Setting(containerEl).setName('批量操作').setHeading();
 
 		new Setting(containerEl)
 			.setName('刷新所有论文元数据')
@@ -1738,11 +1759,12 @@ class PaperManagerSettingTab extends PluginSettingTab {
 				await this.plugin.batchRefreshAll();
 			}));
 
-		containerEl.createEl('h3', { text: '内部数据' });
+		new Setting(containerEl).setName('内部数据').setHeading();
 
 		const sourceCount = Object.keys(this.plugin.settings.sourceDoiMap || {}).length;
-		const info = containerEl.createEl('p', { text: `已记录 ${sourceCount} 篇笔记的元数据来源 DOI。` });
-		info.style.cssText = 'color:var(--text-muted);font-size:12px;';
+		new Setting(containerEl)
+			.setName('已记录笔记数')
+			.setDesc(`已记录 ${sourceCount} 篇笔记的元数据来源 DOI。`);
 
 		new Setting(containerEl)
 			.setName('清空元数据来源记录')
@@ -1763,7 +1785,7 @@ class PaperManagerSettingTab extends PluginSettingTab {
 
 	private renderNumericColorSection(containerEl: HTMLElement, key: string, label: string) {
 		const section = containerEl.createDiv({ cls: 'pm-color-section' });
-		section.createEl('h4', { text: label, cls: 'pm-color-section-title' });
+		new Setting(section).setName(label).setHeading();
 
 		const rules = this.plugin.settings.numericColors[key] || [];
 
@@ -1781,8 +1803,7 @@ class PaperManagerSettingTab extends PluginSettingTab {
 		};
 
 		if (rules.length === 0) {
-			const empty = section.createEl('div', { text: '无规则（使用默认字体色）', cls: 'pm-rule-empty' });
-			empty.style.cssText = 'color:var(--text-muted);font-size:12px;padding:4px 0;';
+			section.createEl('div', { text: '无规则（使用默认字体色）', cls: 'pm-rule-empty' });
 		}
 	}
 
@@ -1811,13 +1832,17 @@ class PaperManagerSettingTab extends PluginSettingTab {
 		colorInput.placeholder = '#ef4444 或留空';
 
 		const preview = row.createSpan({ cls: 'pm-rule-preview' });
-		preview.style.background = rule.color || 'transparent';
-		preview.style.border = rule.color ? 'none' : '1px dashed var(--text-faint)';
+		preview.setCssStyles({
+			background: rule.color || 'transparent',
+			border: rule.color ? 'none' : '1px dashed var(--text-faint)',
+		});
 
 		colorInput.oninput = () => {
 			rule.color = colorInput.value.trim();
-			preview.style.background = rule.color || 'transparent';
-			preview.style.border = rule.color ? 'none' : '1px dashed var(--text-faint)';
+			preview.setCssStyles({
+				background: rule.color || 'transparent',
+				border: rule.color ? 'none' : '1px dashed var(--text-faint)',
+			});
 		};
 		colorInput.onchange = async () => {
 			await this.plugin.saveSettings();
@@ -1838,7 +1863,7 @@ class PaperManagerSettingTab extends PluginSettingTab {
 
 	private renderEnumColorSection(containerEl: HTMLElement, key: string, label: string) {
 		const section = containerEl.createDiv({ cls: 'pm-color-section' });
-		section.createEl('h4', { text: label, cls: 'pm-color-section-title' });
+		new Setting(section).setName(label).setHeading();
 
 		const rules = this.plugin.settings.enumColors[key] || [];
 
@@ -1879,13 +1904,17 @@ class PaperManagerSettingTab extends PluginSettingTab {
 		colorInput.placeholder = '#ef4444 或留空';
 
 		const preview = row.createSpan({ cls: 'pm-rule-preview' });
-		preview.style.background = rule.color || 'transparent';
-		preview.style.border = rule.color ? 'none' : '1px dashed var(--text-faint)';
+		preview.setCssStyles({
+			background: rule.color || 'transparent',
+			border: rule.color ? 'none' : '1px dashed var(--text-faint)',
+		});
 
 		colorInput.oninput = () => {
 			rule.color = colorInput.value.trim();
-			preview.style.background = rule.color || 'transparent';
-			preview.style.border = rule.color ? 'none' : '1px dashed var(--text-faint)';
+			preview.setCssStyles({
+				background: rule.color || 'transparent',
+				border: rule.color ? 'none' : '1px dashed var(--text-faint)',
+			});
 		};
 		colorInput.onchange = async () => {
 			await this.plugin.saveSettings();
