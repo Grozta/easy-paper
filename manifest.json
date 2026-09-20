@@ -1,7 +1,7 @@
 {
   "id": "easy-paper",
   "name": "Easy Paper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "minAppVersion": "1.10.0",
   "description": "Easy Manage paper notes and PDFs, fetch metadata via DOI.",
   "author": "Jinchao Huang",
