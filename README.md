@@ -8,7 +8,10 @@
 [![Obsidian Plugin](https://img.shields.io/badge/Obsidian-Plugin-7c3aed)](https://obsidian.md)
 
 ---
+## 预览
+<img width="2880" height="1698" alt="image" src="https://github.com/user-attachments/assets/b3fdb458-b918-4185-b531-0d72859d4ae3" />
 
+---
 ## ✨ 功能
 
 ### 📥 论文元数据自动抓取
